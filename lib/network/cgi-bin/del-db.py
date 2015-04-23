@@ -2,9 +2,7 @@
 import sqlite3
 
 conn = sqlite3.connect('system.db')
-conn.execute("delete from job_list")
 conn.execute("delete from job")
-conn.execute("delete from slave")
 conn.commit()
 conn.close()
 print """Content-type: text/html
