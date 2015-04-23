@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+import cgi
+import subprocess
+import sqlite3
+
+form = cgi.FieldStorage()
+aid = form.getvalue('id')
+pid = form.getvalue('pid')
+
+conn = sqlite3.connect('system.db')
+conn.execute("delete from job where id=%s"%aid)
+kill = subprocess.Popen(["kill",pid], stdout=subprocess.PIPE, shell=True)
+kill.communicate()
+conn.commit()
+conn.close()
+
+print """Content-type: text/html
+
+<html>
+<head>
+<meta http-equiv="refresh" content="0; url=/main.py" />
+</head>
+<body>
+</body>
+</html>"""

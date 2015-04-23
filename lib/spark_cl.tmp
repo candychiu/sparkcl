@@ -1,0 +1,34 @@
+def map3(data):
+
+    SPARKCL_PLATFORM = os.environ['CL_PLATFORM']
+    SPARKCL_DEVICE = os.environ['CL_DEVICE']
+    print str(SPARKCL_PLATFORM)+":"+str(SPARKCL_DEVICE)
+    KERNEL_CODE="""
+        __kernel void ArraySum(__global float *A,__global float *B,__global float *C){
+       int i = get_global_id(0);
+       C[i] = A[i]+B[i];
+}
+
+    """
+
+    cl_device=cl.get_platforms()[int(SPARKCL_PLATFORM)].get_devices()[int(SPARKCL_DEVICE)]
+    ctx = cl.Context([cl_device])
+    queue = cl.CommandQueue(ctx)
+    prg = cl.Program(ctx, KERNEL_CODE).build()
+    kernel = prg.ArraySum
+    mf = cl.mem_flags
+    print "map" + str(data)
+
+    np_data = []
+    data_buf = []
+    np_data.append(np.array(data[0]).astype(np.float32))
+    data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[0]))
+    np_data.append(np.array(data[1]).astype(np.float32))
+    data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[1]))
+
+    result = np.zeros((5,0)).astype(np.float32)
+    result_buf = cl.Buffer(ctx, mf.WRITE_ONLY, result.nbytes)
+
+    kernel(queue,(5,0),None,data_buf[0],data_buf[1],result_buf)
+    cl.enqueue_read_buffer(queue, result_buf, result).wait()
+    return result.astype(np.int32)

@@ -1,0 +1,51 @@
+from pyspark import SparkContext, SparkConf
+import os
+import sys
+import pyopencl as cl
+import numpy as np
+import subprocess
+
+def map_function(data):
+    proc = subprocess.Popen(["../bin/get-host-platform-device.sh"], stdout=subprocess.PIPE, shell=True)
+    (proc_out, err) = proc.communicate()
+    [SPARKCL_PLATFORM , SPARKCL_DEVICE] = proc_out.split()
+
+    KERNEL_CODE="""
+        __kernel void ArraySum(__global float *A,__global float *B,__global float *C){
+       int i = get_global_id(0);
+       C[i] = A[i]+B[i];
+}
+
+    """
+
+    cl_device=cl.get_platforms()[int(SPARKCL_PLATFORM)].get_devices()[int(SPARKCL_DEVICE)]
+    ctx = cl.Context([cl_device])
+    queue = cl.CommandQueue(ctx)
+    prg = cl.Program(ctx, KERNEL_CODE).build()
+    kernel = prg.ArraySum
+    mf = cl.mem_flags
+
+    np_data = []
+    np_data.append(np.array(data[0]).astype(np.float32))
+    np_data.append(np.array(data[1]).astype(np.float32))
+
+    data_buf = []
+    data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[0]))
+    data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[1]))
+
+    result = np.zeros((5, )).astype(np.float32)
+    result_buf = cl.Buffer(ctx, mf.WRITE_ONLY, result.nbytes)
+
+    kernel(queue,(5,),None,data_buf[0],data_buf[1],result_buf)
+    cl.enqueue_read_buffer(queue, result_buf, result).wait()
+    return result
+
+if __name__ == "__main__" :
+    try:
+        conf = SparkConf().setAppName("test_app").setMaster("spark://10.20.21.122:7077")
+        sc = SparkContext(conf=conf)
+        distData = sc.parallelize([[1,2,3,4,5],[1,2,3,4,5]],2).map(map_function)
+        print distData.collect()
+    except:
+        raise
+

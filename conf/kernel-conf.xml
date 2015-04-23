@@ -1,0 +1,5 @@
+<kernel_conf>
+    <master_ip>10.20.20.52</master_ip>
+    <spark_path>/home/job/sparkcl</spark_path>
+    <kernel_name>kernel.cl</kernel_name>
+</kernel_conf>

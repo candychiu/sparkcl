@@ -1,0 +1,9 @@
+from sparkcl import SparkCLContext ,SparkCLKernel , SparkCL
+if __name__ == "__main__" : 
+	s_cl = SparkCL("job1","10.20.22.107")
+	kernel0 = SparkCLKernel("kernelList_file/1","kernelList_file/1.xml",output_type="int")
+	s_cl.addKernel(kernel0,type="map")
+	kernel1 = SparkCLKernel("kernelList_file/2","kernelList_file/2.xml",output_type="int")
+	s_cl.addKernel(kernel1,type="reduce")
+	data = [ ([[1,2,3],[3,4,5]]) , (1,[[1,2,3],[3,4,5]]) ]
+	print s_cl.run(data)

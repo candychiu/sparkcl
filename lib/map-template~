@@ -1,0 +1,30 @@
+def map_function(data):
+    proc = subprocess.Popen([os.environ["SPARK_HOME"]+"/sparkcl/bin/get-host-platform-device.sh"], stdout=subprocess.PIPE, shell=True)
+    (proc_out, err) = proc.communicate()
+    [SPARKCL_PLATFORM , SPARKCL_DEVICE] = proc_out.split()
+
+    KERNEL_CODE="""
+        %s
+    """
+
+    cl_device=cl.get_platforms()[int(SPARKCL_PLATFORM)].get_devices()[int(SPARKCL_DEVICE)]
+    ctx = cl.Context([cl_device])
+    queue = cl.CommandQueue(ctx)
+    prg = cl.Program(ctx, KERNEL_CODE).build()
+    kernel = prg.%s
+    mf = cl.mem_flags
+    print "map" + str(data)
+
+    np_data = []
+    data_buf = []
+    #np_data.append(np.array(data[0]).astype(np.float32))
+    #np_data.append(np.array(data[1]).astype(np.float32))
+    #data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[0]))
+    #data_buf.append(cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np_data[1]))
+%s
+    result = np.zeros((%s,%s)).astype(np.float32)
+    result_buf = cl.Buffer(ctx, mf.WRITE_ONLY, result.nbytes)
+
+    kernel(queue,(%s,),None%s)
+    cl.enqueue_read_buffer(queue, result_buf, result).wait()
+    return result.astype(np.int32)

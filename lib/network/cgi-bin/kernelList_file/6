@@ -1,0 +1,6 @@
+kernel void foo(global char *in, global char *out, int size){
+                  int idx = get_global_id(0);
+                  for(int i=0;i<5;i++){
+                  	out[idx*size + i] = in[idx*size + i] ;
+                  }
+ }

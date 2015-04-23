@@ -1,0 +1,26 @@
+def %s(data1,data2):
+
+    SPARKCL_PLATFORM = os.environ['CL_PLATFORM']
+    SPARKCL_DEVICE = os.environ['CL_DEVICE']
+    print str(SPARKCL_PLATFORM)+":"+str(SPARKCL_DEVICE)
+    KERNEL_CODE="""
+        %s
+    """
+
+    cl_device=cl.get_platforms()[int(SPARKCL_PLATFORM)].get_devices()[int(SPARKCL_DEVICE)]
+    ctx = cl.Context([cl_device])
+    queue = cl.CommandQueue(ctx)
+    prg = cl.Program(ctx, KERNEL_CODE).build()
+    kernel = prg.%s
+    mf = cl.mem_flags
+    print "map" + str(data)
+
+    np_data = []
+    data_buf = []
+%s
+    result = np.zeros(%s).astype(np.float32)
+    result_buf = cl.Buffer(ctx, mf.WRITE_ONLY, result.nbytes)
+
+    kernel(queue,%s,None%s)
+    cl.enqueue_read_buffer(queue, result_buf, result).wait()
+    return [result.astype(np.float32)]

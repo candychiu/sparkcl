@@ -1,0 +1,6 @@
+<kernel>
+    <output_dim>(2,10)</output_dim>
+    <arguments>$data[0],$data[1],$result,2</arguments>
+    <local_work_size>(2,10)</local_work_size>
+    <global_work_size>(0,0)</global_work_size>
+</kernel>

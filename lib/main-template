@@ -1,0 +1,13 @@
+if __name__ == "__main__" :
+    try:
+        conf = SparkConf().setAppName("%s").setMaster("%s")
+        conf.set("spark.scheduler.allocation.file", "conf/fairscheduler.xml")
+        sc = SparkContext(conf=conf)
+        sc.setLocalProperty("spark.scheduler.pool", "pool1")
+        distData = sc.parallelize([%s]).map(map_function)
+        result =  distData.collect()
+        for r in result :
+            print r
+
+    except:
+        raise

@@ -1,0 +1,1 @@
+__kernel void ArraySum(__global int *A,__global int *B,__global int *C){<br>	int i = get_global_id(0);<br>	C[i] = A[i] * B[i];<br>}
