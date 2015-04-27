@@ -1,0 +1,22 @@
+__kernel void FindPrime(__global int *A,__global int *C,int size){
+	int idx = get_global_id(0);
+	int lower = idx * size + A[0];
+        int upper = (idx+1) * size + A[0];  
+        int number;
+        for (int i=lower;i<=upper;i++){
+                number = i + A[0];
+                printf("%d\n",number);
+                C[i]=number;
+         
+                for(int j=2;j<number;j++){
+                        if(number%j == 0){
+                                C[i]=0;
+                                break;
+                        }
+                }
+                
+        }
+}
+
+
+

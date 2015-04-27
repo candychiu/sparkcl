@@ -7,8 +7,8 @@ import subprocess
 import os.path
 import sys
 
-print "1"
-print os.path.abspath(os.path.join("/home/job/spark-1.2.0/sparkcl/lib/network/slaves-cgi/"))
+#print "1"
+#print os.path.abspath(os.path.join("/home/job/spark-1.2.0/sparkcl/lib/network/slaves-cgi/"))
 IP = sys.argv[1]
 PORT = 9091
 server = BaseHTTPServer.HTTPServer

@@ -1,0 +1,15 @@
+__kernel void FindPrime(__global int *A,__global int *C,int size){
+	int idx = get_global_id(0);
+	int lower = idx * size + A[0];
+        int upper = (idx+1) * size + A[0];  
+        for (int i=lower;i<=upper;i++){
+                C[i]=1;
+                for(int j=2;j<i;j++){
+                        if(i%j == 0){
+                                C[i]=0;
+                                break;
+                        }
+                }
+                
+        }
+}

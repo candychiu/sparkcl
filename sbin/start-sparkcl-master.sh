@@ -17,6 +17,8 @@ red='\033[1;31m'
 . "${SPARK_HOME}/conf/spark-env.sh"
 . "${conf_dir}/sparkcl-env.sh"
 
+python -c "open('${SPARK_HOME}/conf/spark-env.sh','w').write('#!/usr/bin/env bash\nexport SPARK_MASTER_IP=${1}\n')"
+
 if [ -z ${SPARK_MASTER_IP:+x} ];
     then
         echo -e "\nSPARK_MASTER_IP is unset.\nPlease set SPARK_MASTER_IP in SPARK_HOME/conf/spark-env.sh\n";

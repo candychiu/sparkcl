@@ -23,9 +23,9 @@ class SparkCL  :
 
 	def run (self,data) :
 
-		distData = self.sc.Submit(data)
+		distData = self.sc.Submit(data,len(data))
 		for k in self.kernel_list :
-			print k[0], " ", k[1]
+			#print k[0], " ", k[1]
 			distData = distData.addKernel(k[0],k[1])
 		return distData.run()
 
@@ -278,7 +278,7 @@ class SparkCLKernel  (object):
 		mf = cl.mem_flags
 
 		self.sendLog("MAP,KERNEL:%s size= %s byte(s)"%(self.kernel_name,str(sys.getsizeof(data))))
-		print "map" + str(data)
+		print "map" 
 
 		np_data = []
 		data_buf = []
@@ -320,11 +320,11 @@ class SparkCLKernel  (object):
 				continue
 
 		args = tuple(args)
-		print args
+		#print args
 		kernel(queue,self.global_work_size,self.local_work_size,*args)
 		cl.enqueue_read_buffer(queue, result_buf, result).wait()
 
-		print result
+		#print result
 		return result.astype(self.out_type).tolist()
 
 	def loadXMLConfig (self,xml_file) :
