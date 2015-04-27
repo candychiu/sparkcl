@@ -106,9 +106,7 @@ print """
 </div>
 <form method="post" action="del-db.py"  class="form-horizontal" enctype="multipart/form-data">
     <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Clear Database</button>
-            </div>
+        <button type="submit" class="btn btn-default">Clear Database</button>
     </div>
 </form>
 </div>
