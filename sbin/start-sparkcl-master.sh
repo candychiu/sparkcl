@@ -18,7 +18,7 @@ red='\033[1;31m'
 . "${conf_dir}/sparkcl-env.sh"
 
 python -c "open('${SPARK_HOME}/conf/spark-env.sh','w').write('#!/usr/bin/env bash\nexport SPARK_MASTER_IP=${1}\n')"
-
+python -c "import time;open('${SPARKCL_HOME}/work/log/master/logs.txt','w').write('%s - SparkCL Master Started\n'%(time.strftime('%H:%M:%S')))"
 if [ -z ${SPARK_MASTER_IP:+x} ];
     then
         echo -e "\nSPARK_MASTER_IP is unset.\nPlease set SPARK_MASTER_IP in SPARK_HOME/conf/spark-env.sh\n";
@@ -35,7 +35,7 @@ cd "${SPARK_HOME}/sbin"; "./start-master.sh" > /dev/null 2>&1
 
 counter=1
 spark_master_check=$(netstat -an | grep ${SPARK_MASTER_IP}:7077)
-while [ $counter -le 5 ]
+while [ $counter -le 10 ]
 do
     counter=$(( $counter + 1 ))
     if [ -z ${spark_master_check:+x} ];
@@ -46,7 +46,7 @@ do
         break
     fi
 
-    if [ $counter -eq 6 ];
+    if [ $counter -eq 11 ];
         then
         echo -e "[${red}FAILED${NC}]"
         echo "Please check SPARK_MASTER_IP in SPARK_HOME/conf/spark-env.sh"

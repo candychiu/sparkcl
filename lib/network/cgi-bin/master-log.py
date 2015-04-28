@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sqlite3
 import cgi
-
+import os
 print """Content-type: text/html
 
 <html>
@@ -51,7 +51,10 @@ print """Content-type: text/html
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 <h3>Logs</h3>
-
+<textarea readonly style='border-radius: 0.4em;border:1px solid Silver  ; background:white; padding-left:10px; padding-top:10px;  width:100%; height:50% ;resize:vertical;' >"""
+print open(os.environ['SPARKCL_HOME']+'/work/log/master/logs.txt','r').read()
+print """
+</textarea>
 </div>
 
 

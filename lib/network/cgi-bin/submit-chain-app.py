@@ -127,8 +127,16 @@ print """Content-type: text/html
     <hr>
     <form method="post" action="submit-multi-app.py"  class="form-horizontal" enctype="multipart/form-data">
 
+     <div class="form-group">
+            <label for="app_name" class="col-md-2 control-label">Application name</label>
+            
+            <div class="col-sm-10">
+                <input type="text" name="app_name">
+            </div>
+    </div>
     <div class="form-group">
-            <label for="data" class="col-md-1 control-label">Data</label>
+            <label for="data" class="col-md-2 control-label">Data</label>
+            
             <div class="col-sm-10">
                 <input type="file" name="file">
             </div>

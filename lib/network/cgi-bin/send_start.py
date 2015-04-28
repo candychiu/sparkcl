@@ -5,6 +5,7 @@ import time
 import sqlite3
 import subprocess
 import cgi
+import os 
 
 
 print """Content-type: text/html
@@ -20,8 +21,7 @@ slave_id = form.getvalue('S_ID')
 print slave_ip
 print slave_port
 print slave_id
-
-
+open(os.environ['SPARKCL_HOME']+'/work/log/master/logs.txt','a').write('%s - Starting SLAVE_ID=%s ADDRESS=%s\n'%(time.strftime("%H:%M:%S"),slave_id,slave_ip))
 HOST, PORT = slave_ip, int(slave_port)
 data = "slave_start(%s)" %(slave_id)
 
@@ -43,5 +43,7 @@ finally:
 
 if received.strip() == "1" :
     print "1"
+    open(os.environ['SPARKCL_HOME']+'/work/log/master/logs.txt','a').write('%s - Starting SLAVE_ID=%s ADDRESS=%s [SUCCESS]\n'%(time.strftime("%H:%M:%S"),slave_id,slave_ip))
 else :
     print "0"
+    open(os.environ['SPARKCL_HOME']+'/work/log/master/logs.txt','a').write('%s - Starting SLAVE_ID=%s ADDRESS=%s [FAILED]\n'%(time.strftime("%H:%M:%S"),slave_id,slave_ip))

@@ -18,6 +18,7 @@ def fbuffer(f, chunk_size=10000):
 form = cgi.FieldStorage()
 numKernel = form.getvalue('numKernel')
 file_data = form.getvalue('file')
+app_name = form.getvalue('app_name')
 
 save_path =  os.environ['SPARKCL_HOME']+'/work/web_submit/'+str(st)
 os.makedirs(save_path)
@@ -26,7 +27,7 @@ os.makedirs(save_path+'/kernel')
 print """Content-type: text/html
 
 """
-
+open(os.environ['SPARKCL_HOME']+'/work/log/master/logs.txt','a').write('%s - Submit application app_name=%s\n'%(time.strftime("%H:%M:%S"),app_name))
 #print 'Submit timestamp <br>'
 #print st
 
@@ -67,7 +68,7 @@ kernel_code = ""
 kernel_code = kernel_code + "from sparkcl import SparkCLContext ,SparkCLKernel , SparkCL\n"
 kernel_code = kernel_code + 'if __name__ == "__main__" : \n'
 kernel_code = kernel_code + '\t' + 'work_path = "' + save_path + '"\n'
-kernel_code = kernel_code  + '\t' + 's_cl = SparkCL("job1","%s")\n' %(os.environ["SERVER_NAME"].strip())
+kernel_code = kernel_code  + '\t' + 's_cl = SparkCL("%s","%s")\n' %(app_name,os.environ["SERVER_NAME"].strip())
 code_path = os.environ['SPARKCL_HOME']+"/lib/network/cgi-bin/kernelList_file"
 
 
