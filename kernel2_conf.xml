@@ -1,6 +1,0 @@
-<kernel>
-    <output_dim>5</output_dim>
-    <arguments>$data,$result</arguments>
-    <local_work_size></local_work_size>
-    <global_work_size>5</global_work_size>
-</kernel>
