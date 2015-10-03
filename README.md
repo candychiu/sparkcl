@@ -9,7 +9,7 @@ Download intel SDK
 
 Download intel SDK setup patch
 
-(https://drive.google.com/file/d/0BwREp2vz9v5xbTk2QjNQNFI0VTQ/edit?usp=sharing)
+https://drive.google.com/file/d/0BwREp2vz9v5xbTk2QjNQNFI0VTQ/edit?usp=sharing
 
 #How to use
 start master $ ./sbin/start-sparkcl-master [ip address]
