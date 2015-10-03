@@ -7,7 +7,7 @@ Download intel SDK
 
 `wget http://registrationcenter.intel.com/irc_nas/4181/intel_sdk_for_ocl_applications_2014_ubuntu_4.4.0.117_x64.tgz`
 
-Download intel SDK setup patch
+Download intel SDK setup patch and install intel sdk
 
 https://drive.google.com/file/d/0BwREp2vz9v5xbTk2QjNQNFI0VTQ/edit?usp=sharing
 
